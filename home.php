@@ -1,8 +1,22 @@
 <?php 
 session_start();
+
+
  if (!isset($_SESSION['userid'])) {
-    header('location:backemail.php');
+    header('location:backemail.php'); 
  }
+
+  require "conn.php";
+ 
+$email = $_SESSION['vmail'];
+// user id
+$data = mysqli_query($conn,"SELECT * FROM `users` WHERE `email` = '$email'");
+$user = mysqli_fetch_object($data);
+// store id in vars
+$id = $user->userid;
+
+$img = mysqli_query($conn,"SELECT * FROM `profile` WHERE `id` = '$id'");
+$profile = mysqli_fetch_object($img);
  ?>
 
 <!DOCTYPE html>
@@ -18,6 +32,21 @@ session_start();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+        <style type="text/css">
+            body{
+                background-color: rgba(82, 80, 80, 0.107);
+            }
+            .image{
+                width: 120vh;
+                height: 20vh;
+                margin-left:-2vh;
+            }
+            .profile{
+                border-radius: ;
+            }
+        </style>
+
 </head>
 <body>
 <header>
@@ -32,7 +61,7 @@ session_start();
         </button>
           
        <div class="dropdown-menu">
-            <a class="dropdown-item" href="lougout.php">Logout</a>
+            <a class="dropdown-item" href="logout.php">Logout</a>
             <a class="dropdown-item disabled" href="#">Back</a>
            
         </div>
@@ -40,62 +69,114 @@ session_start();
 </header>
 
 
+<center >
+
+<div class="row "  >
+    <div class="col-md-8 bg-white" style="width:120vh;top:0vh;margin-left:15vh;height: 70vh;">
+        <div class="row">
+           <div class="col">
 
 
-  <center class="rigt_side">
-      <div class="d-flex bg-light" style="height:82vh;margin-top:-37px;width:160vh;margin-left: 10px;" >
+            <a href="cover.php"><img src="image\cover.jpg" class="image"></a>
+             <div class="position-absolute d-flex" style="padding-left: 4vh; top: 90px;"> 
+                    <a href="cover.php">
+                        <img class="rounded-circle z-depth-2 border-3 border" style="width: 145px;" src="new.jpg" >
+                    </a>
+                
+                </div>
 
-      <div class="position-relative  " style="height:vh;width:160vh">
 
-          <div class="row">
-        <div class="col ">cover image & Headline</div>
-        <div class="col "></div>
-    </div>
-        <div class="col-md-2 " style="margin-left: 70vh;">
-            <div class="row">
-                <div class="form-control text-center border border-top border-info" ><h6 class="text-info bg-white"  style="height: 5vh;"> Account Settings</h6></div>
+
+
+        </div>
+        <div class="col">
+            <div>
+           <b class="position-absolute text-start " style="left: 14vh;"> headline</b>
+          
            
-            <div class="position-relative bg-white">
-                <a class="dropdown-item ps-4 bg-white" href="#" >Edit Profile</a>
+       </div>
+
+            <!-- php for updating the headline from database -->
+
+            <?php 
+        include('conn.php');
+
+        $select=mysqli_query($conn,"SELECT * FROM headline");
+        if ($select) {
+
+            while ($row=mysqli_fetch_assoc($select)) {
+                $id=['id'];
+                $headline=$row['headline'];
+                ?>
+                <h4 class="position-absolute text-start " style="top:40vh;"><?php print $headline; ?></h4>
+            <a href="updatehead.php?updateid=<?php echo $row['id']; ?>"> 
+               <i class="fa fa-pencil text-dark  position-absolute" aria="true" style="top:200px;left:30vh;"></i></a>
+
+                <?php
+            
+                
+            }
+
+        
+        }
+
+            ?>
+        </div>
+
+        <div class="col">
+            </div>
+            
+        </div>
+    </div>
+    <div class="col-md-4">
+        
+        <div class="col text-center border border-top border-info bg-white" style="width: 65vh;" ><h6 class="text-info bg-white"  > Account Settings</h6></div>
+         <div class=" col position-relative bg-white border border-top border-info" style="width: 65vh;">
+                <a class="dropdown-item ps-4 text-start bg-white" href="#" >Edit Profile</a>
             <i class="fa fa-pencil text-info position-absolute" aria="true" style="top:10px;left:5px;"></i>
             </div>
-            <div class="position-relative bg-white">
-                <a class="dropdown-item ps-4 " href="#" >Change Profile</a>
-            <i class="fa fa-key text-info position-absolute" aria="true" style="top:10px;left:5px"></i>
+
+             <div class=" col position-relative bg-white border border-top border-info" style="width: 65vh;">
+                <a class="dropdown-item ps-4 text-start bg-white" href="changepass.php" >Change password</a>
+            <i class="fa fa-key text-info position-absolute" aria="true" style="top:10px;left:5px;"></i>
             </div>
-            <div class="position-relative bg-white">
-                <a class="dropdown-item ps-4 " href="#" >Sign in Activities</a>
+            <div class="col position-relative bg-white border border-top border-info" style="width: 65vh;">
+                <a class="dropdown-item ps-4 text-start" href="#" >Sign in Activities</a>
             <i class="fa fa-activity text-info position-absolute" aria="true" style="top:10px;left:5px"></i>
             </div>
 
-            <div class="position-relative bg-white">
-                <a class="dropdown-item ps-4 " href="#" >Session Timeout</a>
+            <div class="col position-relative bg-white border border-top border-info" style="width: 65vh;">
+                <a class="dropdown-item ps-4 text-start" href="#" >Session Timeout</a>
             <i class="fa fa-timeout text-info position-absolute" aria="true" style="top:10px;left:5px"></i>
             </div>
-            <div class="position-relative bg-white">
-                <a class="dropdown-item ps-4 " href="#" >Memolisation</a>
+            <div class="col position-relative bg-white border border-top border-info" style="width: 65vh;">
+                <a class="dropdown-item ps-4 text-start " href="#" >Memolisation</a>
             <i class="fa fa-memorial text-info position-absolute" aria="true" style="top:10px;left:5px"></i>
             </div>
-            <div class="position-relative bg-white">
-                <a class="dropdown-item ps-4 " href="#" >Job Feed Contents</a>
+            <div class="col position-relative bg-white border border-top border-info" style="width: 65vh;">
+                <a class="dropdown-item ps-4 text-start " href="#" >Job Feed Contents</a>
             <i class="fa fa-job text-info position-absolute" aria="true" style="top:10px;left:5px"></i>
             </div>
-            <div class="position-relative bg-white">
-                <a class="dropdown-item ps-4 " href="#" >Email & SMS Notifications</a>
+            <div class="col position-relative bg-white border border-top border-info" style="width: 65vh;">
+                <a class="dropdown-item ps-4 text-start " href="#" >Email & SMS Notifications</a>
             <i class="fa fa-envelope text-info position-absolute" aria="true" style="top:10px;left:5px"></i>
             </div>
-            <div class="position-relative bg-white">
-                <a class="dropdown-item ps-4 " href="#" >Push Notifications</a>
+            <div class="col position-relative bg-white border border-top border-info" style="width: 65vh;">
+                <a class="dropdown-item ps-4 text-start" href="#" >Push Notifications</a>
             <i class="fa fa-notification text-info position-absolute" aria="true" style="top:10px;left:5px"></i>
             </div>
-            <div class="position-relative bg-white">
-                <a class="dropdown-item ps-4 " href="#" >Delete My Account</a>
+            <div class="col position-relative bg-white border border-top border-info" style="width: 65vh;">
+                <a class="dropdown-item ps-4 text-start" href="#" >Delete My Account</a>
             <i class="fa fa-delete text-info position-absolute" aria="true" style="top:10px;left:5px"></i>
             </div>
-            </div>
-        
-        </div>
-      </div>
+    </div>
+
+
+</div>
+
+
+  
+     
       
   </center>
 
@@ -126,6 +207,8 @@ session_start();
 
 </footer>
 <script>
+
+
 //show password
 
 function show() {

@@ -3,8 +3,13 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 include 'conn.php';
 session_start();
+
+
+
+
 $error=NULL;
 if (isset($_POST['submit'])) {
+
   //get form input
 
 $f=$_POST['f'];

@@ -2,6 +2,8 @@
 $error=NULL;
 $check=NULL;
 session_start();
+
+
 if (isset($_POST['submit'])) {
 $email=$_POST['e'];
 if (empty($email)) {

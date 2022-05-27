@@ -3,7 +3,6 @@ session_start();
  if (!isset($_SESSION['userid'])) {
     header('location:backemail.php');
  }
- 
  ?>
 
 <!DOCTYPE html>
@@ -19,16 +18,8 @@ session_start();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-
-
-        <style type="text/css">
-            body{
-                background-color: rgba(82, 80, 80, 0.107);
-            }
-        </style>
-
 </head>
-<body >
+<body>
 <header>
 
    <div class="row m-0">
@@ -42,120 +33,67 @@ session_start();
           
        <div class="dropdown-menu">
             <a class="dropdown-item" href="logout.php">Logout</a>
-            <a class="dropdown-item " href="home.php">Back_home_page</a>
+            <a class="dropdown-item disabled" href="#">Back</a>
            
         </div>
    </div> 
 </header>
 
 
-<center>
+<center >
 
-<div class="row " >
-    <div class="col-md-8 bg-white" style="width:110vh;top:0vh;margin-left:30vh;height: 75vh;">
+<div class="row bg-light" style="width:200vh">
+    <div class="col-md-8 ">
         <div class="col">
             cover image
-       
-
-        <form method="POST" action="cover.php" id="wraper">        
-
-            <input type="file" name="cover" value="" /><br>
-
-                <button type="submit" name="uploadfile">
-
-                UPLOAD
-
-                </button>
-
-
-        </form>
-
-
-
         </div>
         <div class="col">
-            <hr>
-            <div class="text-start">
-           <b > headline</b>
+            <div>
+           <b> headline</b>
           
            
        </div>
 
-            <!-- php for updating the headline from database -->
+           
+  <!-- php for updating the headline from database -->
 
             <?php 
-        include('conn.php');
 
-        $select=mysqli_query($conn,"SELECT * FROM headline");
-        if ($select) {
+    include('conn.php');
 
-            while ($row=mysqli_fetch_assoc($select)) {
-                $id=['id'];
-                $headline=$row['headline'];
-                ?>
-                <h4 class="text-start"><?php print $headline; ?></h4>
-            <a href="updatehead.php?updateid=<?php echo $row['id']; ?>"> 
-               <i class="fa fa-pencil text-dark  position-absolute" aria="true" style="top:202px;left:45vh;"></i></a>
+     
+        $head= mysqli_query($conn, "SELECT * FROM headline ");
 
-                <?php
-            
-                
-            }
+        if ($row = mysqli_fetch_array($head) ) {
 
-        
+                 $headline=$row['headline'];
+
+                 
         }
+?>
 
-            ?>
-        </div>
-
-
-        <div class="col-md-6 border">
-            <div class="row">
-                
-            <div class="col position-relative bg-info" style="width: vh;left: -27vh;border-bottom: red;">
-                <a class="dropdown-item ps-4 text-start bg-info text-white" style="width: 108vh;left: vh;border-bottom: red;">Change password</a>
-            <i class="fa fa-key text-white position-absolute" aria="true" style="top:10px;left:5px;"></i>
-            </div>
-
-            <form method="POST" action="setnewpass.php">
-                   
-              <div  class="col position-absolute"style="width:60vh;left:60vh;top:55vh">
-                <label  class="position-absolute " style="left: -25vh;top: vh;">Current Pasword</label>
-                <input type="password" class="form-control ps-4" placeholder="Password" name="cp">
-
-            
-            </div>
-        
+            <form action="updateheadline.php" method="POST" class="bg-info">
                
-              <div class="col position-absolute " style="width:60vh;left: 60vh;top: 64vh;">
-                <label  class="position-absolute " style="left: -25vh;top: vh;">New Password</label>
-                <input type="password" class="form-control ps-4" placeholder="Password" name="np" id="view">
-            <i class="fa fa-key text-info position-absolute"   aria="true" aria="true" style="top:2vh;left:1vh"></i>
-            <i class="fa fa-eye pull-right text-info position-absolute" onclick="show()"  aria="true" style="top:10px;right:5px"></i>
+            <input type="hidden" name="id"  value="<?php //echo $id; ?> ">
 
-            <input type="checkbox"  name=" " class="position-absolute" style="left:0vh ;top: 9vh;">
-            <p class="position-absolute " style="top: 8vh;left:3vh">Remind me to change password for each 3 months</p>
-            </div>
-                 <div class="col position-absolute">
-            <button class="col btn btn-outline-white bg-info text-white position-absolute" style="width:30vh;top:30vh;left:30vh" name="sumbit">Set New Password</button>
-              </div>
-       
-                </div>
+    <input type="text" name="headline" value="<?php echo $headline; ?> " >
+   <a href="updateheadline.php"><button type="update" class="bg-success">Set Headline</button></a> 
+
+                  
             </form>
-          
         </div>
     </div>
     <div class="col-md-4">
         
         <div class="col text-center border border-top border-info bg-white" style="width: 65vh;" ><h6 class="text-info bg-white"  > Account Settings</h6></div>
          <div class=" col position-relative bg-white border border-top border-info" style="width: 65vh;">
-                <a class="dropdown-item ps-4 text-start bg-white" href="#" >Change password</a>
-            <i class="fa fa-key text-info position-absolute" aria="true" style="top:10px;left:5px;"></i>
+                <a class="dropdown-item ps-4 text-start bg-white" href="#" >Edit Profile</a>
+            <i class="fa fa-pencil text-info position-absolute" aria="true" style="top:10px;left:5px;"></i>
             </div>
 
-             <div class="col position-relative bg-white border border-top-3 border-info " style="width: 65vh;">
+             <div class="col position-relative bg-white border border-top border-info" style="width: 65vh;">
                 <a class="dropdown-item ps-4 text-start" href="#" >Change Profile</a>
-            <i class="fa fa-user text-info position-absolute" aria="true" style="top:10px;left:5px"></i>
+            <i class="fa fa-key text-info position-absolute" aria="true" style="top:10px;left:5px"></i>
             </div>
             <div class="col position-relative bg-white border border-top border-info" style="width: 65vh;">
                 <a class="dropdown-item ps-4 text-start" href="#" >Sign in Activities</a>
@@ -200,7 +138,7 @@ session_start();
 
 
 
-<!-- <footer>
+<footer>
 
       <div class="row bg-info position-absolute bottom-0 w-100 m-0 py-2" style=" color:white;left:-1vh">
                 
@@ -222,9 +160,8 @@ session_start();
                 
     </div>
 
-</footer> -->
+</footer>
 <script>
-
 
 
 //show password
